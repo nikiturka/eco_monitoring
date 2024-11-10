@@ -4,6 +4,17 @@ from .models import Pollutant, Enterprise, Record
 from .forms import PollutantForm, EnterpriseForm, RecordForm
 
 
+def get_entity_context(request, entity, form, entity_name, list_url, retrieve_update_delete_url):
+    context = {
+        'entity': entity,
+        'form': form,
+        'entity_name': entity_name,
+        'entity_list_url': list_url,
+        'entity_retrieve_update_delete_url': retrieve_update_delete_url,
+    }
+    return context
+
+
 def pollutant_list_create(request):
     if request.method == "POST":
         form = PollutantForm(request.POST)
@@ -39,11 +50,15 @@ def pollutant_retrieve_update_delete(request, id):
     else:
         form = PollutantForm(instance=pollutant)
 
-    context = {
-        'pollutant': pollutant,
-        'form': form,
-    }
-    return render(request, 'app/pollutant_retrieve_update_delete.html', context)
+    context = get_entity_context(
+        request,
+        pollutant,
+        form,
+        'Забруднювач',
+        'pollutant_list_create',
+        'pollutant_retrieve_update_delete'
+    )
+    return render(request, 'app/base_retrieve_update_delete.html', context)
 
 
 def enterprise_list_create(request):
@@ -81,11 +96,15 @@ def enterprise_retrieve_update_delete(request, id):
     else:
         form = EnterpriseForm(instance=enterprise)
 
-    context = {
-        'enterprise': enterprise,
-        'form': form,
-    }
-    return render(request, 'app/enterprise_retrieve_update_delete.html', context)
+    context = get_entity_context(
+        request,
+        enterprise,
+        form,
+        'Підприємство',
+        'enterprise_list_create',
+        'enterprise_retrieve_update_delete'
+    )
+    return render(request, 'app/base_retrieve_update_delete.html', context)
 
 
 def record_list_create(request):
@@ -123,8 +142,12 @@ def record_retrieve_update_delete(request, id):
     else:
         form = RecordForm(instance=record)
 
-    context = {
-        'record': record,
-        'form': form,
-    }
-    return render(request, 'app/record_retrieve_update_delete.html', context)
+    context = get_entity_context(
+        request,
+        record,
+        form,
+        'Запис',
+        'record_list_create',
+        'record_retrieve_update_delete'
+    )
+    return render(request, 'app/base_retrieve_update_delete.html', context)
