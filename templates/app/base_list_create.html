@@ -8,14 +8,6 @@
 <body>
 <div class="container my-4">
     <h2 class="text-center mb-4">Список {{ entity_name }}</h2>
-
-    <!-- Форма для створення нового об'єкта -->
-    <form method="post" class="border p-3 mb-3">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Створити {{ entity_name }}</button>
-    </form>
-
     <!-- Поиск -->
     <form method="get" class="mb-3">
         <input type="text" name="q" class="form-control" placeholder="Пошук за назвою" value="{{ request.GET.q }}">
@@ -36,6 +28,13 @@
             <li class="list-group-item">Немає записів</li>
         {% endfor %}
     </ul>
+
+    <!-- Форма для створення нового об'єкта -->
+    <form method="post" class="border p-3 mb-3">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Створити {{ entity_name }}</button>
+    </form>
 </div>
 </body>
 </html>
