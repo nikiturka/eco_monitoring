@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Список підприємств</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container my-4">
+    <h2 class="text-center mb-4">Список підприємств</h2>
+
+    <form method="get" class="form-inline mb-4">
+        <input type="text" name="q" class="form-control mr-2" placeholder="Пошук за назвою..." value="{{ request.GET.q }}">
+        <button type="submit" class="btn btn-primary">Пошук</button>
+    </form>
+
+    <ul class="list-group mb-4">
+        {% for enterprise in enterprises %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ enterprise.enterprise_name }} - {{ enterprise.enterprise_type }}
+                <a href="{% url 'enterprise_retrieve_update_delete' enterprise.id %}" class="btn btn-secondary btn-sm">Редагувати</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <h3>Додати нове підприємство</h3>
+    <form method="post" class="border p-3">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Додати</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
