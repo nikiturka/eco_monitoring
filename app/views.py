@@ -123,7 +123,7 @@ def record_list_create(request):
     context = {
         'entities': records,
         'form': form,
-        'entity_name': 'Записи',
+        'entity_name': 'Записів',
         'entity_list_url': 'record_list_create',
         'entity_retrieve_update_delete_url': 'record_retrieve_update_delete',
         'request': request,
