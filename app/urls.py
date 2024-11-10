@@ -5,10 +5,13 @@ from .views import (
     enterprise_list_create,
     enterprise_retrieve_update_delete,
     record_list_create,
-    record_retrieve_update_delete
+    record_retrieve_update_delete,
+    home
 )
 
 urlpatterns = [
+    path('', home, name='home'),
+
     path('pollutants/', pollutant_list_create, name='pollutant_list_create'),
     path('pollutants/<int:id>/', pollutant_retrieve_update_delete, name='pollutant_retrieve_update_delete'),
 

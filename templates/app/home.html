@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Головна сторінка</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container my-4">
+    <h2 class="text-center mb-4">Головна сторінка</h2>
+
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Забруднювачі</h5>
+                    <p class="card-text">Перегляньте або створіть нові записи про забруднювачів.</p>
+                    <a href="{% url 'pollutant_list_create' %}" class="btn btn-primary">Перейти до списку забруднювачів</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Підприємства</h5>
+                    <p class="card-text">Перегляньте або створіть нові записи про підприємства.</p>
+                    <a href="{% url 'enterprise_list_create' %}" class="btn btn-primary">Перейти до списку підприємств</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Записи</h5>
+                    <p class="card-text">Перегляньте або створіть нові записи про діяльність підприємств.</p>
+                    <a href="{% url 'record_list_create' %}" class="btn btn-primary">Перейти до списку записів</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zyG6d8R6Xk35d/2dL5zFfn2dAX3Azq6b89k6VdZ4" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0t/8U6vo/6oNs8xAy9ZZopz5N2tLFG6SgjFg5+ot8lK0lgft" crossorigin="anonymous"></script>
+</body>
+</html>

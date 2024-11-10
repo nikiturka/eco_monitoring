@@ -4,6 +4,10 @@ from .models import Pollutant, Enterprise, Record
 from .forms import PollutantForm, EnterpriseForm, RecordForm
 
 
+def home(request):
+    return render(request, 'app/home.html')
+
+
 def pollutant_list_create(request):
     search_query = request.GET.get('q')
     pollutants = Pollutant.objects.all()
