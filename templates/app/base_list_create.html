@@ -7,7 +7,12 @@
 </head>
 <body>
 <div class="container my-4">
+    <div class="mb-4">
+        <a href="{% url 'home' %}" class="btn btn-secondary">На головну</a>
+    </div>
+
     <h2 class="text-center mb-4">Список {{ entity_name }}</h2>
+
     <form method="get" class="mb-3">
         <input type="text" name="q" class="form-control" placeholder="Пошук за назвою" value="{{ request.GET.q }}">
         <button type="submit" class="btn btn-secondary mt-2">Пошук</button>
