@@ -25,7 +25,7 @@ def pollutant_list_create(request):
     context = {
         'entities': pollutants,
         'form': form,
-        'entity_name': 'Забруднювач',
+        'entity_name': 'Забруднювачів',
         'entity_list_url': 'pollutant_list_create',
         'entity_retrieve_update_delete_url': 'pollutant_retrieve_update_delete',
         'request': request,
@@ -74,7 +74,7 @@ def enterprise_list_create(request):
     context = {
         'entities': enterprises,
         'form': form,
-        'entity_name': 'Підприємство',
+        'entity_name': 'Підприємств',
         'entity_list_url': 'enterprise_list_create',
         'entity_retrieve_update_delete_url': 'enterprise_retrieve_update_delete',
         'request': request,
@@ -123,7 +123,7 @@ def record_list_create(request):
     context = {
         'entities': records,
         'form': form,
-        'entity_name': 'Запис',
+        'entity_name': 'Записи',
         'entity_list_url': 'record_list_create',
         'entity_retrieve_update_delete_url': 'record_retrieve_update_delete',
         'request': request,
