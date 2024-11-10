@@ -1,7 +1,7 @@
 # views.py
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Pollutant, Enterprise
-from .forms import PollutantForm, EnterpriseForm
+from .models import Pollutant, Enterprise, Record
+from .forms import PollutantForm, EnterpriseForm, RecordForm
 
 
 def pollutant_list_create(request):
@@ -86,3 +86,45 @@ def enterprise_retrieve_update_delete(request, id):
         'form': form,
     }
     return render(request, 'app/enterprise_retrieve_update_delete.html', context)
+
+
+def record_list_create(request):
+    if request.method == "POST":
+        form = RecordForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('record_list_create')
+    else:
+        form = RecordForm()
+
+    records = Record.objects.all()
+    search_query = request.GET.get('q')
+    if search_query:
+        records = records.filter(enterprise__enterprise_name__icontains=search_query)
+
+    context = {
+        'records': records,
+        'form': form,
+    }
+    return render(request, 'app/record_list_create.html', context)
+
+
+def record_retrieve_update_delete(request, id):
+    record = get_object_or_404(Record, id=id)
+
+    if request.method == "POST":
+        form = RecordForm(request.POST, instance=record)
+        if form.is_valid():
+            form.save()
+            return redirect('record_list_create')
+    elif request.method == "DELETE":
+        record.delete()
+        return redirect('record_list_create')
+    else:
+        form = RecordForm(instance=record)
+
+    context = {
+        'record': record,
+        'form': form,
+    }
+    return render(request, 'app/record_retrieve_update_delete.html', context)
