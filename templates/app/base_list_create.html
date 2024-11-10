@@ -8,20 +8,17 @@
 <body>
 <div class="container my-4">
     <h2 class="text-center mb-4">Список {{ entity_name }}</h2>
-    <!-- Поиск -->
     <form method="get" class="mb-3">
         <input type="text" name="q" class="form-control" placeholder="Пошук за назвою" value="{{ request.GET.q }}">
         <button type="submit" class="btn btn-secondary mt-2">Пошук</button>
     </form>
 
-    <!-- Список об'єктів -->
     <ul class="list-group">
         {% for entity in entities %}
             <li class="list-group-item d-flex justify-content-between">
                 {{ entity }}
                 <div>
                     <a href="{% url entity_retrieve_update_delete_url entity.id %}" class="btn btn-info btn-sm">Редагувати</a>
-                    <a href="{% url entity_retrieve_update_delete_url entity.id %}?delete=true" class="btn btn-danger btn-sm">Видалити</a>
                 </div>
             </li>
         {% empty %}
@@ -29,7 +26,6 @@
         {% endfor %}
     </ul>
 
-    <!-- Форма для створення нового об'єкта -->
     <form method="post" class="border p-3 mb-3">
         {% csrf_token %}
         {{ form.as_p }}
