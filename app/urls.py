@@ -1,23 +1,28 @@
 from django.urls import path
-from .views import (
-    pollutant_list_create,
-    pollutant_retrieve_update_delete,
-    enterprise_list_create,
-    enterprise_retrieve_update_delete,
-    record_list_create,
-    record_retrieve_update_delete,
-    home
-)
+from . import views
 
 urlpatterns = [
-    path('', home, name='home'),
+    # Pollutant URLs
+    path('pollutants/', views.PollutantListView.as_view(), name='pollutant_list'),
+    path('pollutants/create/', views.PollutantCreateView.as_view(), name='pollutant_create'),
+    path('pollutant/<int:pk>/', views.PollutantDetailView.as_view(), name='pollutant_detail'),
+    path('pollutants/<int:pk>/update/', views.PollutantUpdateView.as_view(), name='pollutant_update'),
+    path('pollutants/<int:pk>/delete/', views.PollutantDeleteView.as_view(), name='pollutant_delete'),
 
-    path('pollutants/', pollutant_list_create, name='pollutant_list_create'),
-    path('pollutants/<int:id>/', pollutant_retrieve_update_delete, name='pollutant_retrieve_update_delete'),
+    # Enterprise URLs
+    path('enterprises/', views.EnterpriseListView.as_view(), name='enterprise_list'),
+    path('enterprises/create/', views.EnterpriseCreateView.as_view(), name='enterprise_create'),
+    path('enterprises/<int:pk>/', views.EnterpriseDetailView.as_view(), name='enterprise_detail'),
+    path('enterprises/<int:pk>/update/', views.EnterpriseUpdateView.as_view(), name='enterprise_update'),
+    path('enterprises/<int:pk>/delete/', views.EnterpriseDeleteView.as_view(), name='enterprise_delete'),
 
-    path('enterprises/', enterprise_list_create, name='enterprise_list_create'),
-    path('enterprises/<int:id>/', enterprise_retrieve_update_delete, name='enterprise_retrieve_update_delete'),
+    # Record URLs
+    path('records/', views.RecordListView.as_view(), name='record_list'),
+    path('records/create/', views.RecordCreateView.as_view(), name='record_create'),
+    path('records/<int:pk>/', views.RecordDetailView.as_view(), name='record_detail'),
+    path('records/<int:pk>/update/', views.RecordUpdateView.as_view(), name='record_update'),
+    path('records/<int:pk>/delete/', views.RecordDeleteView.as_view(), name='record_delete'),
 
-    path('records/', record_list_create, name='record_list_create'),
-    path('records/<int:id>/', record_retrieve_update_delete, name='record_retrieve_update_delete'),
+    # Home URL
+    path('', views.home, name='home'),
 ]

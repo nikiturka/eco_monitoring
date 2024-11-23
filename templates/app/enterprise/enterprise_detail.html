@@ -1,0 +1,16 @@
+{% extends 'app/base.html' %}
+
+{% block body %}
+    
+    <div>
+        <a href="{% url 'enterprise_update' enterprise.pk %}" class="btn btn-info btn-sm mb-3">Редагувати</a>
+    </div>
+    
+    <div class="border p-3 mb-3">
+        <p><strong>Enterprise Name:</strong> {{ enterprise.enterprise_name }}</p>
+        <p><strong>Enterprise Type:</strong> {{ enterprise.enterprise_type }}</p>
+        <p><strong>Ownership:</strong> {{ enterprise.ownership }}</p>
+        <p><strong>City:</strong> {{ enterprise.city }}</p>
+        <p><strong>District:</strong> {{ enterprise.district }}</p>
+    </div>
+{% endblock %}

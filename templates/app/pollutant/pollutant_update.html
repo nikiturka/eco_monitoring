@@ -1,0 +1,15 @@
+{% extends 'app/base.html' %}
+
+{% block body %}
+    <h3 class="mt-5">Pollutant</h3>
+    <form method="post" class="border p-3 mb-3">
+        {% csrf_token %}
+        {{ form.as_p }}
+        
+        <!-- Контейнер для кнопок с выравниванием по горизонтали -->
+        <div class="d-flex justify-content-between">
+            <button type="submit" class="btn btn-primary">Зберегти</button>
+            <a href="{% url 'pollutant_delete' pk=pollutant.pk %}" class="btn btn-danger">Видалити</a>
+        </div>
+    </form>
+{% endblock %}

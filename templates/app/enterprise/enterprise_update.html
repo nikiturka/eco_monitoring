@@ -1,0 +1,14 @@
+{% extends 'app/base.html' %}
+
+{% block body %}
+    <h3 class="mt-5">Enterprise</h3>
+    <form method="post" class="border p-3 mb-3">
+        {% csrf_token %}
+        {{ form.as_p }}
+        
+        <div class="d-flex justify-content-between">
+            <button type="submit" class="btn btn-primary">Зберегти</button>
+            <a href="{% url 'enterprise_delete' pk=enterprise.pk %}" class="btn btn-danger">Видалити</a>
+        </div>
+    </form>
+{% endblock %}

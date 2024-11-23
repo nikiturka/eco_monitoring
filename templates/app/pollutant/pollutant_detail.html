@@ -1,0 +1,17 @@
+{% extends 'app/base.html' %}
+
+{% block body %}
+    
+    <div>
+        <a href="{% url 'pollutant_update' pollutant.pk %}" class="btn btn-info btn-sm mb-3">Редагувати</a>
+    </div>
+    
+    <div class="border p-3 mb-3">
+        <p><strong>Pollutant Name:</strong> {{ pollutant.pollutant_name }}</p>
+        <p><strong>Atmosphere Tax:</strong> {{ pollutant.atmosphere_tax }}</p>
+        <p><strong>Waterbody Tax:</strong> {{ pollutant.waterbody_tax }}</p>
+        <p><strong>Placement Tax:</strong> {{ pollutant.placement_tax }}</p>
+        <p><strong>GDK Average Daily:</strong> {{ pollutant.GDK_avg_daily }}</p>
+        <p><strong>Danger Class:</strong> {{ pollutant.danger_class }}</p>
+    </div>
+{% endblock %}

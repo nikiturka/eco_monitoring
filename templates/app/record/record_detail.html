@@ -1,0 +1,15 @@
+{% extends 'app/base.html' %}
+
+{% block body %}
+    
+    <div>
+        <a href="{% url 'record_update' record.pk %}" class="btn btn-info btn-sm mb-3">Редагувати</a>
+    </div>
+    
+    <div class="border p-3 mb-3">
+        <p><strong>Year:</strong> {{ record.year }}</p>
+        <p><strong>Enterprise:</strong> {{ record.enterprise.enterprise_name }}</p>
+        <p><strong>Pollutant:</strong> {{ record.pollutant.pollutant_name }}</p> 
+        <p><strong>Emission Per Year:</strong> {{ record.emission_per_year }}</p>
+    </div>
+{% endblock %}

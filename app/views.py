@@ -1,164 +1,137 @@
-# views.py
-from django.shortcuts import render, get_object_or_404, redirect
+from django.db.models import Q
+from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
+
 from .models import Pollutant, Enterprise, Record
-from .forms import PollutantForm, EnterpriseForm, RecordForm, TaxForm
+from .forms import PollutantForm, EnterpriseForm, RecordForm
 
 
 def home(request):
     return render(request, 'app/home.html')
 
 
-def pollutant_list_create(request):
-    search_query = request.GET.get('q')
-    pollutants = Pollutant.objects.all()
-    if search_query:
-        pollutants = pollutants.filter(pollutant_name__icontains=search_query)
+class PollutantListView(ListView):
+    model = Pollutant
+    template_name = 'app/pollutant/pollutant_list.html'
+    context_object_name = 'pollutants'
 
-    if request.method == "POST":
-        form = PollutantForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('pollutant_list_create')
-    else:
-        form = PollutantForm()
-
-    context = {
-        'entities': pollutants,
-        'form': form,
-        'entity_name': 'Забруднювачів',
-        'entity_list_url': 'pollutant_list_create',
-        'entity_retrieve_update_delete_url': 'pollutant_retrieve_update_delete',
-        'request': request,
-    }
-    return render(request, 'app/base_list_create.html', context)
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_query = self.request.GET.get('q')
+        if search_query:
+            queryset = queryset.filter(pollutant_name__icontains=search_query)
+        return queryset
 
 
-def pollutant_retrieve_update_delete(request, id):
-    pollutant = get_object_or_404(Pollutant, id=id)
-
-    if request.method == "POST":
-        form = PollutantForm(request.POST, instance=pollutant)
-        if form.is_valid():
-            form.save()
-            return redirect('pollutant_list_create')
-    elif request.method == "DELETE":
-        pollutant.delete()
-        return redirect('pollutant_list_create')
-    else:
-        form = PollutantForm(instance=pollutant)
-
-    context = {
-        'entity': pollutant,
-        'form': form,
-        'entity_name': 'Забруднювач',
-        'entity_list_url': 'pollutant_list_create',
-        'entity_retrieve_update_delete_url': 'pollutant_retrieve_update_delete',
-    }
-    return render(request, 'app/base_retrieve_update_delete.html', context)
+class PollutantCreateView(CreateView):
+    model = Pollutant
+    form_class = PollutantForm
+    success_url = reverse_lazy('pollutant_list')
+    template_name = 'app/pollutant/pollutant_create.html'
 
 
-def enterprise_list_create(request):
-    search_query = request.GET.get('q')
-    enterprises = Enterprise.objects.all()
-    if search_query:
-        enterprises = enterprises.filter(enterprise_name__icontains=search_query)
 
-    if request.method == "POST":
-        form = EnterpriseForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('enterprise_list_create')
-    else:
-        form = EnterpriseForm()
-
-    context = {
-        'entities': enterprises,
-        'form': form,
-        'entity_name': 'Підприємств',
-        'entity_list_url': 'enterprise_list_create',
-        'entity_retrieve_update_delete_url': 'enterprise_retrieve_update_delete',
-        'request': request,
-    }
-    return render(request, 'app/base_list_create.html', context)
+class PollutantDetailView(DetailView):
+    model = Pollutant
+    template_name = 'app/pollutant/pollutant_detail.html'
+    context_object_name = 'pollutant'
 
 
-def enterprise_retrieve_update_delete(request, id):
-    enterprise = get_object_or_404(Enterprise, id=id)
-
-    if request.method == "POST":
-        form = EnterpriseForm(request.POST, instance=enterprise)
-        if form.is_valid():
-            form.save()
-            return redirect('enterprise_list_create')
-    elif request.method == "DELETE":
-        enterprise.delete()
-        return redirect('enterprise_list_create')
-    else:
-        form = EnterpriseForm(instance=enterprise)
-
-    context = {
-        'entity': enterprise,
-        'form': form,
-        'entity_name': 'Підприємство',
-        'entity_list_url': 'enterprise_list_create',
-        'entity_retrieve_update_delete_url': 'enterprise_retrieve_update_delete',
-    }
-    return render(request, 'app/base_retrieve_update_delete.html', context)
+class PollutantUpdateView(UpdateView):
+    model = Pollutant
+    form_class = PollutantForm
+    success_url = reverse_lazy('pollutant_list')
+    template_name = 'app/pollutant/pollutant_update.html'
 
 
-def record_list_create(request):
-    search_query = request.GET.get('q')
-    records = Record.objects.all()
-    if search_query:
-        records = records.filter(enterprise__enterprise_name__icontains=search_query)
-
-    if request.method == "POST":
-        form = RecordForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('record_list_create')
-    else:
-        form = RecordForm()
-
-    context = {
-        'entities': records,
-        'form': form,
-        'entity_name': 'Записів',
-        'entity_list_url': 'record_list_create',
-        'entity_retrieve_update_delete_url': 'record_retrieve_update_delete',
-        'request': request,
-    }
-    return render(request, 'app/base_list_create.html', context)
+class PollutantDeleteView(DeleteView):
+    model = Pollutant
+    template_name = 'app/pollutant/pollutant_confirm_delete.html'
+    success_url = reverse_lazy('pollutant_list')
 
 
-def record_retrieve_update_delete(request, id):
-    record = get_object_or_404(Record, id=id)
+class EnterpriseListView(ListView):
+    model = Enterprise
+    template_name = 'app/enterprise/enterprise_list.html'
+    context_object_name = 'enterprises'
 
-    if request.method == "POST":
-        if 'tax_type' in request.POST:
-            tax_form = TaxForm(request.POST)
-            if tax_form.is_valid():
-                tax_form.save(record)
-        else:
-            form = RecordForm(request.POST, instance=record)
-            if form.is_valid():
-                form.save()
-            return redirect('record_list_create')
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_query = self.request.GET.get('q')
+        if search_query:
+            queryset = queryset.filter(enterprise_name__icontains=search_query)
+        return queryset
 
-    elif request.method == "DELETE":
-        record.delete()
-        return redirect('record_list_create')
 
-    else:
-        form = RecordForm(instance=record)
-        tax_form = TaxForm()
+class EnterpriseCreateView(CreateView):
+    model = Enterprise
+    form_class = EnterpriseForm
+    success_url = reverse_lazy('enterprise_list')
+    template_name = 'app/enterprise/enterprise_create.html'
 
-    context = {
-        'entity': record,
-        'form': form,
-        'tax_form': tax_form,
-        'entity_name': 'Запис',
-        'entity_list_url': 'record_list_create',
-        'entity_retrieve_update_delete_url': 'record_retrieve_update_delete',
-    }
-    return render(request, 'app/records_retrieve_update_delete.html', context)
+
+
+class EnterpriseDetailView(DetailView):
+    model = Enterprise
+    template_name = 'app/enterprise/enterprise_detail.html'
+    context_object_name = 'enterprise'
+
+
+class EnterpriseUpdateView(UpdateView):
+    model = Enterprise
+    form_class = EnterpriseForm
+    success_url = reverse_lazy('enterprise_list')
+    template_name = 'app/enterprise/enterprise_update.html'
+
+
+class EnterpriseDeleteView(DeleteView):
+    model = Enterprise
+    template_name = 'app/enterprise/enterprise_confirm_delete.html'
+    success_url = reverse_lazy('enterprise_list')
+
+
+class RecordListView(ListView):
+    model = Record
+    template_name = 'app/record/record_list.html'
+    context_object_name = 'records'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_query = self.request.GET.get('q')
+        if search_query:
+            queryset = queryset.filter(
+                Q(year__icontains=search_query) |
+                Q(enterprise__enterprise_name__icontains=search_query) |
+                Q(pollutant__pollutant_name__icontains=search_query) |
+                Q(emission_per_year__icontains=search_query)
+            )
+
+        return queryset
+
+
+class RecordCreateView(CreateView):
+    model = Record
+    form_class = RecordForm
+    success_url = reverse_lazy('record_list')
+    template_name = 'app/record/record_create.html'
+
+
+
+class RecordDetailView(DetailView):
+    model = Record
+    template_name = 'app/record/record_detail.html'
+    context_object_name = 'record'
+
+
+class RecordUpdateView(UpdateView):
+    model = Record
+    form_class = RecordForm
+    success_url = reverse_lazy('record_list')
+    template_name = 'app/record/record_update.html'
+
+
+class RecordDeleteView(DeleteView):
+    model = Record
+    template_name = 'app/record/record_confirm_delete.html'
+    success_url = reverse_lazy('record_list')

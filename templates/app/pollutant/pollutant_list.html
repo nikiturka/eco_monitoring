@@ -1,0 +1,33 @@
+{% extends 'app/base.html' %}
+
+{% block title %}Pollutants{% endblock %}
+
+{% block body %}
+    <div class="mb-4">
+        <a href="{% url 'home' %}" class="btn btn-secondary">На головну</a>
+    </div>
+
+    <h2 class="text-center mb-4">Pollutants</h2>
+    
+    <div class="mb-3">
+        <a href="{% url 'pollutant_create' %}" class="btn btn-primary">Додати новий забруднювач</a>
+    </div>
+
+    <form method="get" class="mb-3">
+        <input type="text" name="q" class="form-control" placeholder="Пошук за назвою" value="{{ request.GET.q }}">
+        <button type="submit" class="btn btn-secondary mt-2">Пошук</button>
+    </form>
+    
+    <ul class="list-group">
+        {% for pollutant in pollutants %}
+            <li class="list-group-item d-flex justify-content-between">
+                {{ pollutant }}
+                <div>
+                    <a href="{% url 'pollutant_detail' pollutant.pk %}" class="btn btn-info btn-sm">Перейти</a>
+                </div>
+            </li>
+        {% empty %}
+            <li class="list-group-item">Немає записів</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
