@@ -1,0 +1,19 @@
+{% extends 'app/base.html' %}
+
+{% block body %}
+    <h3 class="mt-5">Розрахунок податку</h3>
+    <form method="post" class="border p-3 mb-3">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Розрахувати</button>
+    </form>
+
+    {% if tax %}
+        <div class="mt-4">
+            <p><strong>Тип податку:</strong> {{ tax_type }}</p>
+            <p><strong>Сумма податку:</strong> {{ tax_amount }}</p>
+            <p><strong>Об'єм забруднення підприємства на рік:</strong> {{ emission_per_year }}</p>
+            <p><strong>Значення {{ tax_type }}  для цього забруднювача ({{ pollutant }}):</strong> {{ pollutant_tax_value }}</p>
+        </div>
+    {% endif %}
+{% endblock %}

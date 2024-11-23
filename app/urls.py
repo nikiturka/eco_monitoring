@@ -23,6 +23,9 @@ urlpatterns = [
     path('records/<int:pk>/update/', views.RecordUpdateView.as_view(), name='record_update'),
     path('records/<int:pk>/delete/', views.RecordDeleteView.as_view(), name='record_delete'),
 
+    # Tax URLs
+    path('tax/create/', views.TaxCreateView.as_view(), name='tax_create'),
+
     # Home URL
     path('', views.home, name='home'),
 ]

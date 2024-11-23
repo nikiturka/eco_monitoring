@@ -3,8 +3,9 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 
-from .models import Pollutant, Enterprise, Record
-from .forms import PollutantForm, EnterpriseForm, RecordForm
+from .models import Pollutant, Enterprise, Record, Tax
+from .forms import PollutantForm, EnterpriseForm, RecordForm, TaxForm
+from .services import TaxCalculatorFactory
 
 
 def home(request):
@@ -135,3 +136,47 @@ class RecordDeleteView(DeleteView):
     model = Record
     template_name = 'app/record/record_confirm_delete.html'
     success_url = reverse_lazy('record_list')
+
+
+class TaxCreateView(CreateView):
+    model = Tax
+    form_class = TaxForm
+    template_name = 'app/tax/tax_create.html'
+    success_url = reverse_lazy('tax_create')
+
+    def form_valid(self, form):
+        record = form.cleaned_data['record']
+        tax_type = form.cleaned_data['tax_type']
+
+        existing_tax = Tax.objects.filter(record=record, tax_type=tax_type).first()
+
+        if existing_tax:
+            context = self.get_context_data(
+                form=form,
+                tax=existing_tax,
+                tax_type=tax_type,
+                tax_amount=existing_tax.tax_amount,
+                emission_per_year=existing_tax.record.emission_per_year,
+                pollutant_tax_value=existing_tax.pollutant_tax_type_value,
+                pollutant=record.pollutant
+            )
+            return self.render_to_response(context)
+
+        tax_calculator = TaxCalculatorFactory.get_calculator(tax_type)
+        tax_amount = tax_calculator(record)
+
+        tax = form.save(commit=False)
+        tax.tax_amount = tax_amount
+        tax.save()
+
+        context = self.get_context_data(
+            form=form,
+            tax=tax,
+            tax_type=tax_type,
+            tax_amount=tax_amount,
+            emission_per_year=tax.record.emission_per_year,
+            pollutant_tax_value=tax.pollutant_tax_type_value,
+            pollutant=record.pollutant
+        )
+
+        return self.render_to_response(context)
