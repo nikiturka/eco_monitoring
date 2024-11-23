@@ -16,4 +16,8 @@
             <p><strong>Значення {{ tax_type }}  для цього забруднювача ({{ pollutant }}):</strong> {{ pollutant_tax_value }}</p>
         </div>
     {% endif %}
+    
+    <div class="mt-4">
+        <a href="{% url 'home' %}" class="btn btn-secondary">На головну</a>
+    </div>
 {% endblock %}
