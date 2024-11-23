@@ -34,7 +34,7 @@ class Record(models.Model):
     emission_per_year = models.FloatField(validators=[MinValueValidator(0)])
 
     def __str__(self):
-        return f"Record for {self.enterprise} in {self.year}"
+        return f"Record for {self.enterprise} in {self.year} on {self.pollutant}"
 
 
 class Tax(models.Model):
