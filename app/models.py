@@ -53,9 +53,3 @@ class Tax(models.Model):
             TaxType.placement_tax: self.record.pollutant.placement_tax,
         }
         return tax_mapping.get(self.tax_type)
-
-
-    def save(self, *args, **kwargs):
-        if self.tax_amount is None:
-            self.tax_amount = self.record.emission_per_year * self.pollutant_tax_type_value
-        super().save(*args, **kwargs)

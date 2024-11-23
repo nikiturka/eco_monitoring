@@ -148,32 +148,21 @@ class TaxCreateView(CreateView):
         record = form.cleaned_data['record']
         tax_type = form.cleaned_data['tax_type']
 
-        existing_tax = Tax.objects.filter(record=record, tax_type=tax_type).first()
+        tax = Tax.objects.filter(record=record, tax_type=tax_type).first()
 
-        if existing_tax:
-            context = self.get_context_data(
-                form=form,
-                tax=existing_tax,
-                tax_type=tax_type,
-                tax_amount=existing_tax.tax_amount,
-                emission_per_year=existing_tax.record.emission_per_year,
-                pollutant_tax_value=existing_tax.pollutant_tax_type_value,
-                pollutant=record.pollutant
-            )
-            return self.render_to_response(context)
+        if not tax:
+            tax_calculator = TaxCalculatorFactory.get_calculator(tax_type)
+            tax_amount = tax_calculator(record)
 
-        tax_calculator = TaxCalculatorFactory.get_calculator(tax_type)
-        tax_amount = tax_calculator(record)
-
-        tax = form.save(commit=False)
-        tax.tax_amount = tax_amount
-        tax.save()
+            tax = form.save(commit=False)
+            tax.tax_amount = tax_amount
+            tax.save()
 
         context = self.get_context_data(
             form=form,
             tax=tax,
             tax_type=tax_type,
-            tax_amount=tax_amount,
+            tax_amount=tax.tax_amount,
             emission_per_year=tax.record.emission_per_year,
             pollutant_tax_value=tax.pollutant_tax_type_value,
             pollutant=record.pollutant
