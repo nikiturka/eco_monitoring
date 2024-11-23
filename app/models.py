@@ -33,31 +33,29 @@ class Record(models.Model):
     pollutant = models.ForeignKey(Pollutant, on_delete=models.CASCADE, related_name='records')
     emission_per_year = models.FloatField(validators=[MinValueValidator(0)])
 
-    class Meta:
-        unique_together = ('year', 'enterprise', 'pollutant')
-
     def __str__(self):
         return f"Record for {self.enterprise} in {self.year}"
 
 
-class Tax(Record):
+class Tax(models.Model):
+    record = models.ForeignKey(Record, on_delete=models.CASCADE)
     tax_amount = models.FloatField(validators=[MinValueValidator(0)])
     tax_type = models.CharField(max_length=255, choices=TAX_TYPE_CHOICES)
 
     def __str__(self):
-        return f'{self.tax_type} for {self.enterprise} in {self.year}'
+        return f'{self.tax_type} for {self.record.enterprise} in {self.record.year}'
 
     @property
     def pollutant_tax_type_value(self):
         tax_mapping = {
-            TaxType.atmosphere_tax: self.pollutant.atmosphere_tax,
-            TaxType.waterbody_tax: self.pollutant.waterbody_tax,
-            TaxType.placement_tax: self.pollutant.placement_tax,
+            TaxType.atmosphere_tax: self.record.pollutant.atmosphere_tax,
+            TaxType.waterbody_tax: self.record.pollutant.waterbody_tax,
+            TaxType.placement_tax: self.record.pollutant.placement_tax,
         }
         return tax_mapping.get(self.tax_type)
 
 
     def save(self, *args, **kwargs):
         if self.tax_amount is None:
-            self.tax_amount = self.emission_per_year * self.pollutant_tax_type_value
+            self.tax_amount = self.record.emission_per_year * self.pollutant_tax_type_value
         super().save(*args, **kwargs)

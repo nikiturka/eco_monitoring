@@ -1,7 +1,7 @@
 # views.py
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Pollutant, Enterprise, Record
-from .forms import PollutantForm, EnterpriseForm, RecordForm
+from .forms import PollutantForm, EnterpriseForm, RecordForm, TaxForm
 
 
 def home(request):
@@ -135,21 +135,30 @@ def record_retrieve_update_delete(request, id):
     record = get_object_or_404(Record, id=id)
 
     if request.method == "POST":
-        form = RecordForm(request.POST, instance=record)
-        if form.is_valid():
-            form.save()
+        if 'tax_type' in request.POST:
+            tax_form = TaxForm(request.POST)
+            if tax_form.is_valid():
+                tax_form.save(record)
+        else:
+            form = RecordForm(request.POST, instance=record)
+            if form.is_valid():
+                form.save()
             return redirect('record_list_create')
+
     elif request.method == "DELETE":
         record.delete()
         return redirect('record_list_create')
+
     else:
         form = RecordForm(instance=record)
+        tax_form = TaxForm()
 
     context = {
         'entity': record,
         'form': form,
+        'tax_form': tax_form,
         'entity_name': 'Запис',
         'entity_list_url': 'record_list_create',
         'entity_retrieve_update_delete_url': 'record_retrieve_update_delete',
     }
-    return render(request, 'app/base_retrieve_update_delete.html', context)
+    return render(request, 'app/records_retrieve_update_delete.html', context)

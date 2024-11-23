@@ -1,0 +1,18 @@
+{% extends 'app/base_retrieve_update_delete.html' %}
+
+{% block tax %}
+    <div class="col-md-3 mx-auto">
+        <h4 class="text-center mt-4">Розрахунок податку</h4>
+    
+        <form method="post" class="border p-3">
+            {% csrf_token %}
+            <div class="form-group text-center">
+                {{ tax_form.tax_type.label_tag }}
+                {{ tax_form.tax_type }}         
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-success">Розрахувати</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
