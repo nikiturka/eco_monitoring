@@ -26,6 +26,9 @@ urlpatterns = [
     # Tax URLs
     path('tax/create/', views.TaxCreateView.as_view(), name='tax_create'),
 
+    # Risk URLs
+    path('risk/create/', views.RiskCreateView.as_view(), name='risk_create'),
+
     # Home URL
     path('', views.home, name='home'),
 ]

@@ -6,6 +6,8 @@ from app.models import Pollutant
 
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
+        file_path = os.path.join(BASE_DIR, 'data', 'pollutants.xlsx')
+
         try:
             wb = openpyxl.load_workbook(file_path)
             sheet = wb.active

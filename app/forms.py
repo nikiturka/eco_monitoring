@@ -1,5 +1,5 @@
 from django import forms
-from .models import Pollutant, Enterprise, Record, Tax
+from .models import Pollutant, Enterprise, Record, Tax, Risk
 
 
 class PollutantForm(forms.ModelForm):
@@ -24,3 +24,9 @@ class TaxForm(forms.ModelForm):
     class Meta:
         model = Tax
         fields = ['record', 'tax_type']
+
+
+class RiskForm(forms.ModelForm):
+    class Meta:
+        model = Risk
+        fields = ['pollutant']

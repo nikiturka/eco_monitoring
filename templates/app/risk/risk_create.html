@@ -1,0 +1,23 @@
+{% extends 'app/base.html' %}
+
+{% block body %}
+    <h3 class="mt-5">Розрахунок ризику</h3>
+    <form method="post" class="border p-3 mb-3">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Розрахувати</button>
+    </form>
+
+    {% if current_risk %}
+        <div class="mt-4">
+            <p><strong>Полютант:</strong> {{ pollutant }}</p>
+            <p><strong>Концентрація:</strong> {{ concentration }}</p>
+            <p><strong>RFC:</strong> {{ rfc }}</p>
+            <p><strong>Поточний ризик:</strong> {{ current_risk }}</p>
+        </div>
+    {% endif %}
+    
+    <div class="mt-4">
+        <a href="{% url 'home' %}" class="btn btn-secondary">На головну</a>
+    </div>
+{% endblock %}

@@ -40,14 +40,26 @@
             </div>
         </div>
     </div>
-        
+    
     <div class="d-flex justify-content-center mt-5">
-        <div class="col-md-6 mb-3">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Розрахунок податку</h5>
-                    <p class="card-text">Розрахувати податок (будь-який тип) для будь-якого існуючого запису.</p>
-                    <a href="{% url 'tax_create' %}" class="btn btn-primary">Розрахувати</a>
+        <div class="row w-100">
+            <div class="col-md-6 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Розрахунок податку</h5>
+                        <p class="card-text">Розрахувати податок (будь-який тип) для будь-якого існуючого запису.</p>
+                        <a href="{% url 'tax_create' %}" class="btn btn-primary">Розрахувати</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Розрахунок ризику</h5>
+                        <p class="card-text">Розрахувати ризик для будь-якого існуючого в системі забруднювача.</p>
+                        <a href="{% url 'risk_create' %}" class="btn btn-primary">Розрахувати</a>
+                    </div>
                 </div>
             </div>
         </div>

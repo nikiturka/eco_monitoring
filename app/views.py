@@ -3,9 +3,9 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 
-from .models import Pollutant, Enterprise, Record, Tax
-from .forms import PollutantForm, EnterpriseForm, RecordForm, TaxForm
-from .services import TaxCalculatorFactory
+from .models import Pollutant, Enterprise, Record, Tax, Risk
+from .forms import PollutantForm, EnterpriseForm, RecordForm, TaxForm, RiskForm
+from .services import TaxCalculatorFactory, RiskCalculatorFactory
 
 
 def home(request):
@@ -166,6 +166,33 @@ class TaxCreateView(CreateView):
             emission_per_year=tax.record.emission_per_year,
             pollutant_tax_value=tax.pollutant_tax_type_value,
             pollutant=record.pollutant
+        )
+
+        return self.render_to_response(context)
+
+
+class RiskCreateView(CreateView):
+    model = Risk
+    form_class = RiskForm
+    template_name = 'app/risk/risk_create.html'
+    success_url = reverse_lazy('risk_create')
+
+    def form_valid(self, form):
+        pollutant = form.cleaned_data['pollutant']
+        risk = Risk.objects.filter(pollutant=pollutant).first()
+        risk_calculator = RiskCalculatorFactory.get_calculator(risk.substance_type)
+
+        current_risk = risk_calculator(risk)
+
+        risk.current_risk = current_risk
+        risk.save()
+
+        context = self.get_context_data(
+            form=form,
+            pollutant=pollutant,
+            current_risk=current_risk,
+            concentration=risk.concentration,
+            rfc=risk.rfc
         )
 
         return self.render_to_response(context)

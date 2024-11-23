@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
-from app.choices import ENTERPRISE_OWNERSHIP_CHOICES, TAX_TYPE_CHOICES, TaxType
+from app.choices import ENTERPRISE_OWNERSHIP_CHOICES, TAX_TYPE_CHOICES, TaxType, SUBSTANCE_TYPE_CHOICES
 
 
 class Pollutant(models.Model):
@@ -53,3 +53,17 @@ class Tax(models.Model):
             TaxType.placement_tax: self.record.pollutant.placement_tax,
         }
         return tax_mapping.get(self.tax_type)
+
+
+class Risk(models.Model):
+    pollutant = models.ForeignKey(Pollutant,on_delete=models.CASCADE)
+    substance_type = models.CharField(max_length=255, choices=SUBSTANCE_TYPE_CHOICES)
+    danger_class = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(4)])
+    gdk = models.FloatField(validators=[MinValueValidator(0)], null=True, blank=True)
+    concentration = models.FloatField(validators=[MinValueValidator(0)], null=True, blank=True)
+    rfc = models.FloatField(validators=[MinValueValidator(0)], null=True, blank=True)
+    sfi = models.FloatField(validators=[MinValueValidator(0)], null=True, blank=True)
+    current_risk = models.CharField(max_length=50, null=True, blank=True)
+
+    def __str__(self):
+        return f"Risk for {self.pollutant}"
